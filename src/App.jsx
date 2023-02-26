@@ -23,7 +23,7 @@ function App() {
 		createNewListContent: false
 	})
 
-	const requestEndPoint = "https://elvistkf.synology.me:49255/api/grocery-list/"
+	const requestEndPoint = "https://api.elvistkf.synology.me/api/grocery-list/"
 
 	const [groceryList, setGroceryList] = useState(null);
 
