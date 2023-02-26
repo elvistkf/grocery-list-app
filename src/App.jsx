@@ -23,7 +23,6 @@ function App() {
 		createNewListContent: false
 	})
 
-	// var requestEndPoint = "https://api.elvistkf.synology.me/api/grocery-list"
 	var requestEndPoint = process.env.API_URI
 
 	const [groceryList, setGroceryList] = useState(null);
