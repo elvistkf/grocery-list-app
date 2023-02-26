@@ -23,7 +23,7 @@ function App() {
 		createNewListContent: false
 	})
 
-	var requestEndPoint = "https://api.elvistkf.synology.me/api/grocery-list"
+	var requestEndPoint = "https://elvistkf.synology.me:49255/api/grocery-list"
 
 	const [groceryList, setGroceryList] = useState(null);
 
@@ -36,11 +36,6 @@ function App() {
 				console.log(response);
 			} catch (e) {
 				console.error(e);
-				var requestEndPoint = "http://10.88.111.10/api/grocery-list"
-				let response = await axios.get(requestEndPoint);
-				response = response.data;
-				setGroceryList(response);
-				console.log(response);
 			} finally {
 				setLoading(false);
 			}
