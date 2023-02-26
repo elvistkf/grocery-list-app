@@ -5,6 +5,7 @@ import colourConfig from './config/colourConfig';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Main from './components/Main';
+import Loading from './components/Loading';
 
 const Container = styled.div`
   background-color: ${colourConfig.background};
@@ -48,7 +49,7 @@ function App() {
 			<Header state={state} setState={setState} groceryList={groceryList} />
 			{
 				loading ? (
-					<div>Loading</div>
+					<Loading />
 				) : (
 					<Main groceryList={groceryList} state={state} setState={setState} requestEndPoint={requestEndPoint}/>
 				)
