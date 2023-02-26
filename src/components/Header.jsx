@@ -75,6 +75,7 @@ function Header(props) {
                 displayID: null
             });
         }
+        props.fetchData();
     }
 
     function handleAddButtonClick() {
@@ -92,8 +93,7 @@ function Header(props) {
                     createNewListContent: true
                 }
             )
-        }
-        // console.log(props.state)
+        } 
     }
 
     return (

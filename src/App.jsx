@@ -2,7 +2,7 @@ import './App.css';
 import styled from 'styled-components';
 import Header from './components/Header';
 import colourConfig from './config/colourConfig';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import Main from './components/Main';
 import Loading from './components/Loading';
@@ -28,30 +28,27 @@ function App() {
 
 	const [groceryList, setGroceryList] = useState(null);
 
-	useEffect(() => {
-		async function fetchData() {
-			try {
-				let response = await axios.get(requestEndPoint);
-				response = response.data;
-				setGroceryList(response);
-				// console.log(response);
-			} catch (e) {
-				console.error(e);
-			} finally {
-				setLoading(false);
-			}
-		}
-		fetchData();
+	const fetchData = useCallback(async () => {
+		console.log("fetching")
+		setLoading(true);
+		let response = await axios.get(requestEndPoint);
+		response = response.data;
+		setGroceryList(response);
+		setLoading(false);
 	}, [requestEndPoint])
+
+	useEffect(() => {
+		fetchData();
+	}, [fetchData, requestEndPoint])
 
 	return (
 		<Container>
-			<Header state={state} setState={setState} groceryList={groceryList} />
+			<Header state={state} setState={setState} groceryList={groceryList} requestEndPoint={requestEndPoint} fetchData={fetchData} />
 			{
 				loading ? (
 					<Loading />
 				) : (
-					<Main groceryList={groceryList} state={state} setState={setState} requestEndPoint={requestEndPoint}/>
+					<Main groceryList={groceryList} state={state} setState={setState} requestEndPoint={requestEndPoint} />
 				)
 			}
 		</Container>
