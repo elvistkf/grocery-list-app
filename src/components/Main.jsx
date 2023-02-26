@@ -98,7 +98,7 @@ function Main(props) {
                 displayID: null
             });
         }
-        props.fetchData();
+        // props.fetchData();
     }
 
     function handleItemDelete(listID) {
