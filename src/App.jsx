@@ -23,8 +23,7 @@ function App() {
 		createNewListContent: false
 	})
 
-	var requestEndPoint = "https://api.elvistkf.synology.me/api/grocery-list"
-	// var requestEndPoint = process.env.API_URI
+	var requestEndPoint = process.env.REACT_APP_API_URI
 
 	const [groceryList, setGroceryList] = useState(null);
 
@@ -34,7 +33,7 @@ function App() {
 				let response = await axios.get(requestEndPoint);
 				response = response.data;
 				setGroceryList(response);
-				console.log(response);
+				// console.log(response);
 			} catch (e) {
 				console.error(e);
 			} finally {
@@ -42,7 +41,7 @@ function App() {
 			}
 		}
 		fetchData();
-	}, [])
+	}, [requestEndPoint])
 
 	return (
 		<Container>
