@@ -29,7 +29,6 @@ function App() {
 	const [groceryList, setGroceryList] = useState(null);
 
 	const fetchData = useCallback(async () => {
-		console.log("fetching")
 		setLoading(true);
 		let response = await axios.get(requestEndPoint);
 		response = response.data;

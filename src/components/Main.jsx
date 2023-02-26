@@ -75,20 +75,25 @@ function Main(props) {
         <Container>
             {
                 props.state.createNewList && !props.state.display ? (
-                    <NewListItemContainer ref={input => input && input.focus()} contentEditable="true" autoFocus onKeyDown={handleNewListItemKeyDown} placeholder={"123"}/>
-                ) : 
-                props.state.createNewListContent && props.state.display ? (
-                    <NewListItemContainer ref={input => input && input.focus()} contentEditable="true" autoFocus onKeyDown={handleNewListContentKeyDown} placeholder={"123"}/>
-                ) : <span></span>
+                    <NewListItemContainer ref={input => input && input.focus()} contentEditable="true" autoFocus onKeyDown={handleNewListItemKeyDown} placeholder={"123"} />
+                ) :
+                    props.state.createNewListContent && props.state.display ? (
+                        <NewListItemContainer ref={input => input && input.focus()} contentEditable="true" autoFocus onKeyDown={handleNewListContentKeyDown} placeholder={"123"} />
+                    ) : <span></span>
             }
             <ListContainer>
                 {
                     props.state.display === true ?
-                        props.groceryList.find(obj => {
-                            return obj["_id"] === props.state.displayID
-                        }).data.map((item, index) => (
-                            <ListContentItem item={item} state={props.state} setState={props.setState} requestEndPoint={props.requestEndPoint} key={index} />
-                        )) :
+                        props.groceryList
+                            .find(obj => {
+                                return obj["_id"] === props.state.displayID
+                            }).data
+                            .sort((obj1, obj2) => {
+                                return obj1.completed >= obj2.completed
+                            })
+                            .map((item, index) => (
+                                <ListContentItem item={item} state={props.state} setState={props.setState} requestEndPoint={props.requestEndPoint} key={index} />
+                            )) :
                         props.groceryList.map((item, index) => (
                             <ListItem item={item} setState={props.setState} key={index} />
                         ))
