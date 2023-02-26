@@ -22,10 +22,10 @@ const TitleContainer = styled.div`
     border-radius: 1em;
     font-size: large;
     
-    &:hover{
+    /* &:hover{
         cursor: pointer; 
         background-color: ${colourConfig.backgroundHover};
-    }
+    } */
 `
 
 const BackButton = styled.div`
