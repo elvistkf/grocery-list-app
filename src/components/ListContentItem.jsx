@@ -46,7 +46,7 @@ function ListContentItem(props) {
         props.setState({
             ...props.state
         })
-        axios.post(props.requestEndPoint + props.state.displayID + "/toggle/" + props.item["_id"]);
+        axios.post(props.requestEndPoint + "/" + props.state.displayID + "/toggle/" + props.item["_id"]);
     }
 
     return (

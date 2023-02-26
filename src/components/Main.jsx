@@ -67,7 +67,7 @@ function Main(props) {
             }
             ).data.push(newList)
 
-            axios.post(props.requestEndPoint + props.state.displayID, newList);
+            axios.post(props.requestEndPoint + "/" + props.state.displayID, newList);
         }
     }
 
