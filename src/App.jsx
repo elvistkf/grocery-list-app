@@ -21,7 +21,9 @@ function App() {
 		display: false,
 		displayID: null,
 		createNewList: false,
-		createNewListContent: false
+		createNewListContent: false,
+		editList: false,
+		editListContent: false
 	})
 
 	var requestEndPoint = process.env.REACT_APP_API_URI
@@ -47,7 +49,7 @@ function App() {
 				loading ? (
 					<Loading />
 				) : (
-					<Main groceryList={groceryList} state={state} setState={setState} requestEndPoint={requestEndPoint} />
+					<Main groceryList={groceryList} setGroceryList={setGroceryList} state={state} setState={setState} requestEndPoint={requestEndPoint} fetchData={fetchData} />
 				)
 			}
 		</Container>

@@ -1,15 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import colourConfig from '../config/colourConfig'
-import { MdLocalGroceryStore, MdAdd, MdArrowBack } from 'react-icons/md'
+import { MdLocalGroceryStore, MdAdd, MdOutlineEditOff, MdOutlineCheck } from 'react-icons/md'
 
 const Container = styled.div`
     background-color: ${colourConfig.header};
-    /* min-height: 3em; */
     min-height: ${props => props.display ? "5em" : "4em"};
     display: flex;
     align-items: center;
-    /* justify-content: center; */
     justify-content: space-between;
 `
 
@@ -21,14 +19,13 @@ const TitleContainer = styled.div`
     padding: 0.5em 1em 0.5em 1em;
     border-radius: 1em;
     font-size: large;
-    
-    /* &:hover{
-        cursor: pointer; 
-        background-color: ${colourConfig.backgroundHover};
-    } */
 `
 
-const BackButton = styled.div`
+const ListTitleContainer = styled.div`
+    margin-top: 5px;
+`
+
+const EditButton = styled.div`
     display: flex;
     align-items: center;
     justify-items: auto;
@@ -37,11 +34,11 @@ const BackButton = styled.div`
     padding: 0.5em 0.5em 0.5em 0.5em;
     border-radius: 1em;
 
-    color: ${props => props.display ? colourConfig.font : colourConfig.header};
+    color: ${colourConfig.font};
 
     &:hover{
-        cursor: ${props => props.display ? "pointer" : "null"}; 
-        background-color: ${props => props.display ? colourConfig.backgroundHover : colourConfig.header};
+        cursor: pointer;
+        background-color: ${colourConfig.backgroundHover};
     }
 `
 
@@ -54,11 +51,9 @@ const AddButton = styled.div`
     padding: 0.5em 0.5em 0.5em 0.5em;
     border-radius: 1em;
 
-    /* color: ${props => props.display ? colourConfig.header : colourConfig.font}; */
     color: ${colourConfig.font};
 
     &:hover{
-        /* cursor: ${props => props.display ? "null" : "pointer"};  */
         cursor: pointer;
         background-color: ${colourConfig.backgroundHover};
     }
@@ -79,41 +74,61 @@ function Header(props) {
     }
 
     function handleAddButtonClick() {
-        if (!props.state.display) {
-            props.setState(
-                {
-                    ...props.state,
-                    createNewList: true
-                }
-            )
-        } else {
+        if (props.state.display) {
             props.setState(
                 {
                     ...props.state,
                     createNewListContent: true
                 }
             )
-        } 
+        } else {
+            props.setState(
+                {
+                    ...props.state,
+                    createNewList: true
+                }
+            )
+        }
+    }
+
+    function handleEditButtonClick() {
+        if (props.state.display) {
+            props.setState(
+                {
+                    ...props.state,
+                    editListContent: !props.state.editListContent
+                }
+            )
+        } else {
+            props.setState(
+                {
+                    ...props.state,
+                    editList: !props.state.editList
+                }
+            )
+        }
     }
 
     return (
         <Container display={props.state.display ? 1 : 0}>
-            <BackButton onClick={handleBackButtonClick} display={props.state.display ? 1 : 0}>
-                <MdArrowBack />
-            </BackButton>
+            <EditButton display={props.state.display ? 1 : 0} onClick={handleEditButtonClick}>
+                {
+                    !(props.state.editList || props.state.editListContent) ? <MdOutlineEditOff /> : <MdOutlineCheck />
+                }
+            </EditButton>
 
             <TitleContainer>
-                <span>
-                    <MdLocalGroceryStore />Grocery List
-                </span>
+                <div><MdLocalGroceryStore /> Grocery List</div>
                 {
-                    props.state.display ? 
-                    <div>
-                        {props.groceryList.find(obj => {
-                            return obj["_id"] === props.state.displayID
-                        }).title}
-                    </div> : 
-                    <span></span>
+                    props.state.display && (
+                        <ListTitleContainer>
+                            {
+                                props.groceryList.find(obj => {
+                                    return obj["_id"] === props.state.displayID
+                                }).title
+                            }
+                        </ListTitleContainer>
+                    )
                 }
             </TitleContainer>
             <AddButton onClick={handleAddButtonClick} display={props.state.display ? 1 : 0}>

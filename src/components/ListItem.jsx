@@ -1,10 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 import colourConfig from '../config/colourConfig'
+import { MdDelete } from 'react-icons/md'
 
 const Container = styled.div`
-    padding: 1em;
+    display: flex;
+    justify-content: left;
+    align-items: center;
     border-bottom: 1px #303030 solid;
+`
+
+const SubContainer = styled.div`
+    width: 100%;
+    padding: 1em;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -12,6 +20,19 @@ const Container = styled.div`
     &:hover{
         cursor: pointer; 
         background-color: ${colourConfig.backgroundHover};
+    }
+`
+
+const DeleteButtonContainer = styled.div`
+    padding: 0.75em;
+    display: flex;
+    align-items: center;
+    border-right: 1px #303030 solid;
+    font-size: larger;
+
+    &:hover{
+        cursor: pointer;
+        background-color: red;
     }
 `
 
@@ -32,21 +53,35 @@ function ListItem(props) {
         })
     }
 
+    function handleDeleteButtonClick() {
+        props.handleItemDelete(props.item["_id"])
+    }
+
     const completedCount = props.item.data.filter(obj => {
-        return obj.completed 
+        return obj.completed
     }).length
 
     const totalCount = props.item.data.length
 
     return (
-        <Container onClick={handleClick}>
-            <TitleContainer>
-                {props.item.title}
-            </TitleContainer>
-            <CountContainer>
-                {completedCount}/{totalCount}
-            </CountContainer>
+        <Container>
+            {
+                !props.state.display && props.state.editList && (
+                    <DeleteButtonContainer onClick={handleDeleteButtonClick}>
+                        <MdDelete />
+                    </DeleteButtonContainer>
+                )
+            }
+            <SubContainer onClick={handleClick}>
+                <TitleContainer>
+                    {props.item.title}
+                </TitleContainer>
+                <CountContainer>
+                    {completedCount}/{totalCount}
+                </CountContainer>
+            </SubContainer>
         </Container>
+
     )
 }
 
