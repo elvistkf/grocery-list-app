@@ -61,17 +61,17 @@ const AddButton = styled.div`
 
 function Header(props) {
 
-    function handleBackButtonClick() {
-        console.log(props.state.display);
-        if (props.state.display) {
-            props.setState({
-                ...props.state,
-                display: false,
-                displayID: null
-            });
-        }
-        props.fetchData();
-    }
+    // function handleBackButtonClick() {
+    //     console.log(props.state.display);
+    //     if (props.state.display) {
+    //         props.setState({
+    //             ...props.state,
+    //             display: false,
+    //             displayID: null
+    //         });
+    //     }
+    //     props.fetchData();
+    // }
 
     function handleAddButtonClick() {
         if (props.state.display) {

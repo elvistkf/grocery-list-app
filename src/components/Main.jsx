@@ -6,6 +6,7 @@ import uuid4 from 'uuid4'
 import axios from 'axios'
 import colourConfig from '../config/colourConfig'
 import { MdArrowBack } from 'react-icons/md'
+// import Alert from 'react-bootstrap/Alert';
 
 
 const Container = styled.div`
@@ -49,6 +50,40 @@ const BackButton = styled.div`
 
 
 function Main(props) {
+
+    async function createNewList(list) {
+        props.groceryList.unshift(list);
+
+        let response = await axios.post(props.requestEndPoint, list);
+        if (response.status === 200) {
+            console.log("created new list successfully")
+        }
+    }
+
+    async function createNewListContent(content) {
+        props.groceryList.find(obj => {
+            return obj["_id"] === props.state.displayID
+        }
+        ).data.push(content)
+
+        let response = await axios.post(props.requestEndPoint + "/" + props.state.displayID, content);
+        if (response.status === 200) {
+            console.log("created new item successfully")
+        }
+    }
+
+    async function deleteGroceryList(listID) {
+        const newList = props.groceryList.filter(obj => {
+            return obj["_id"] !== listID
+        })
+        props.setGroceryList(newList);
+
+        let response = await axios.delete(props.requestEndPoint + "/" + listID);
+        if (response.status === 200) {
+            console.log("deleted list " + listID + " successfully")
+        }
+    }
+
     function handleNewListItemKeyDown(event) {
         if (event.key === "Enter") {
             props.setState({
@@ -61,10 +96,15 @@ function Main(props) {
                 title: event.target.textContent,
                 data: []
             }
-
-            props.groceryList.unshift(newList)
-            axios.post(props.requestEndPoint, newList);
+            createNewList(newList);
         }
+    }
+
+    function handleNewListItemFocusOut(event) {
+        props.setState({
+            ...props.state,
+            createNewList: false
+        })
     }
 
     function handleNewListContentKeyDown(event) {
@@ -74,19 +114,20 @@ function Main(props) {
                 createNewListContent: false
             })
 
-            let newList = {
+            let newContent = {
                 _id: uuid4(),
                 name: event.target.textContent,
                 completed: false
             }
-
-            props.groceryList.find(obj => {
-                return obj["_id"] === props.state.displayID
-            }
-            ).data.push(newList)
-
-            axios.post(props.requestEndPoint + "/" + props.state.displayID, newList);
+            createNewListContent(newContent);
         }
+    }
+
+    function handleNewListContentFocusOut(event) {
+        props.setState({
+            ...props.state,
+            createNewListContent: false
+        })
     }
 
     function handleBackButtonClick() {
@@ -98,29 +139,24 @@ function Main(props) {
                 displayID: null
             });
         }
-        // props.fetchData();
+        props.fetchData();
     }
 
-    function handleItemDelete(listID) {
-        console.log(listID);
-        const newList = props.groceryList.filter(obj => {
-            return obj["_id"] !== listID
-        })
-        props.setGroceryList(newList);
-
-        axios.delete(props.requestEndPoint + "/" + listID);
-    }
+    // function handleItemDelete(listID) {
+    //     console.log(listID);
+    //     deleteGroceryList(listID);
+    // }
 
     return (
         <Container>
             {
                 props.state.createNewList && !props.state.display && (
-                    <NewListItemContainer ref={input => input && input.focus()} contentEditable="true" autoFocus onKeyDown={handleNewListItemKeyDown} placeholder={"123"} />
+                    <NewListItemContainer ref={input => input && input.focus()} contentEditable="true" autoFocus onKeyDown={handleNewListItemKeyDown} onBlur={handleNewListItemFocusOut} placeholder={"123"} />
                 )
             }
             {
                 props.state.createNewListContent && props.state.display && (
-                    <NewListItemContainer ref={input => input && input.focus()} contentEditable="true" autoFocus onKeyDown={handleNewListContentKeyDown} placeholder={"123"} />
+                    <NewListItemContainer ref={input => input && input.focus()} contentEditable="true" autoFocus onKeyDown={handleNewListContentKeyDown} onBlur={handleNewListContentFocusOut} placeholder={"123"} />
                 )
             }
             <ListContainer>
@@ -137,7 +173,7 @@ function Main(props) {
                                 <ListContentItem item={item} state={props.state} setState={props.setState} requestEndPoint={props.requestEndPoint} key={index} />
                             )) :
                         props.groceryList.map((item, index) => (
-                            <ListItem item={item} state={props.state} setState={props.setState} handleItemDelete={handleItemDelete} key={index} />
+                            <ListItem item={item} state={props.state} setState={props.setState} handleItemDelete={deleteGroceryList} key={index} />
                         ))
 
 
